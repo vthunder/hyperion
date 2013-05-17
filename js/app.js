@@ -7,7 +7,7 @@ appurl = appurl.href;
 angular.module("app", ['firebase'])
 
   .value('purl', purl)
-  .value('appurl', appurl + '/hyperion')
+  .value('appurl', appurl + 'hyperion')
   .value('firebaseurl', "https://openhome.firebaseio.com/")
   .value('client_id', (appurl == "http://localhost:8000"?
                        "798c72ca5049c8da83542ec260ecf9e9" : // dev sandbox
