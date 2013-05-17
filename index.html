@@ -1,0 +1,46 @@
+<!doctype html>
+<html ng-app="app">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>A Title</title>
+  <link rel="stylesheet" href="css/vendor/normalize.css" />
+  <link rel="stylesheet" href="css/vendor/foundation.css" />
+  <link rel="stylesheet" href="css/app.css" />
+
+  <script src="//login.persona.org/include.js"></script>
+  <script src="//raw.github.com/allmarkedup/jQuery-URL-Parser/master/purl.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+
+  <script src="//cdn.firebase.com/v0/firebase.js"></script>
+  <script src="//cdn.firebase.com/v0/firebase-auth-client.js"></script>
+  <script src="//raw.github.com/firebase/angularFire/gh-pages/angularFire.js"></script>
+
+  <script src="js/vendor/custom.modernizr.js"></script>
+  <script src="js/vendor/foundation.min.js"></script>
+
+  <script src="js/app.js"></script>
+</head>
+
+<body ng-controller="AppCtrl">
+  <div class="row">
+    <div ng-show="!auth.id">
+      <h3>Welcome!</h3>
+      <a href="" class="small button"
+         ng-click="signin()">Sign in</a>
+    </div>
+    <div ng-show="auth.id">
+      <h3>Welcome, {{user.name}}!</h3>
+      <div ng-show="!user.services.facebook">
+        <a href="" class="small button"
+           ng-click="connect('facebook')">Connect to Facebook</a>
+      </div>
+      <a href="" class="small button"
+         ng-click="signout()">Sign out</a>
+    </div>
+  </div>
+  <div class="row" ng-view></div>
+</body>
+</html>
