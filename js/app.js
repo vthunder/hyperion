@@ -1,15 +1,12 @@
-// find out host we're on
-// sadtimes: global
-var appurl = document.createElement('a');
-appurl.href = "/";
-appurl = appurl.href;
-
 angular.module("app", ['firebase'])
 
-  .value('purl', purl)
-  .value('appurl', appurl + 'hyperion')
+  .value('appurl',
+         $.url().attr('protocol') + '://' +
+         $.url().attr('host') + 
+         ($.url().attr('port') == 80? '' : (':' + $.url().attr('port'))) +
+         '/hyperion')
   .value('firebaseurl', "https://openhome.firebaseio.com/")
-  .value('client_id', (appurl == "http://localhost:8000"?
+  .value('client_id', ($.url().attr('host') == "localhost"?
                        "798c72ca5049c8da83542ec260ecf9e9" : // dev sandbox
                        "caab71371395bc5051173950c0f33822")) // vthunder.github.io/hyperion
 
@@ -40,7 +37,7 @@ angular.module("app", ['firebase'])
   })
 
   .factory('singly', function($rootScope, $location, $http, $window,
-                              purl, appurl, client_id) {
+                              appurl, client_id) {
     var singly = {};
 
     return {
@@ -58,7 +55,7 @@ angular.module("app", ['firebase'])
         $window.location.href = url;
       },
       checkUrlParams: function() {
-        var url = purl($location.absUrl());
+        var url = $.url($location.absUrl());
         var access_token = url.fparam('access_token') || url.fparam('/access_token');
         var account = url.fparam('account') || url.fparam('/account');
         if (access_token) {
@@ -73,6 +70,10 @@ angular.module("app", ['firebase'])
       getProfile: function() {
         return $http.get("https://api.singly.com/profile?access_token=" +
                          singly.access_token);
+      },
+      getType: function(type) {
+        return $http.get("https://api.singly.com/types/" + type +
+                         "?access_token=" + singly.access_token);
       }
     };
   })
@@ -101,10 +102,15 @@ angular.module("app", ['firebase'])
           $scope.user = profile;
           $scope.$safeApply($scope);
         });
+      singly.getType('photos')
+        .success(function(photos) {
+          $scope.photos = photos;
+          $scope.$safeApply($scope);
+        });
     });
 
     $scope.signin = function() { authService.login(); };
-    $scope.signout = function() { authService.logout(); };
+    $scope.signout = function() { authService.logout(); window.location = "/hyperion"; };
     $scope.connect = function(service) { singly.connect(service); };
   })
 
@@ -126,5 +132,10 @@ angular.module("app", ['firebase'])
     };
   });
 
-// Init Foundation JS components
-$(document).foundation();
+$(function(){
+  // Init Foundation JS components
+  $(document).foundation(function(resp) {
+    if (console.errors)
+      console.log(resp.errors);
+  });
+});

@@ -12,17 +12,14 @@
   <link rel="stylesheet" href="/hyperion/css/app.css" />
 
   <script src="//login.persona.org/include.js"></script>
-  <script src="//raw.github.com/allmarkedup/jQuery-URL-Parser/master/purl.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="//raw.github.com/allmarkedup/jQuery-URL-Parser/master/purl.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
-
   <script src="//cdn.firebase.com/v0/firebase.js"></script>
   <script src="//cdn.firebase.com/v0/firebase-auth-client.js"></script>
   <script src="//raw.github.com/firebase/angularFire/gh-pages/angularFire.js"></script>
-
   <script src="/hyperion/js/vendor/custom.modernizr.js"></script>
   <script src="/hyperion/js/vendor/foundation.min.js"></script>
-
   <script src="/hyperion/js/app.js"></script>
 </head>
 
@@ -43,6 +40,19 @@
          ng-click="signout()">Sign out</a>
     </div>
   </div>
-  <div class="row" ng-view></div>
+  <hr />
+  <div class="row">
+    <ul class="clearing-thumbs" data-clearing>
+      <li ng-repeat="photo in photos">
+        <a href="{{photo.data.source}}">
+          <img src="{{photo.data.picture}}">
+        </a>
+      </li>
+    </ul>
+    <!-- somehow clearing.js doesn't work on the photos above without this -->
+    <ul ng-show="user.services.facebook" class="clearing-thumbs" data-clearing>
+      <li><a href=""><img src=""></a></li>
+    </ul>
+  </div>
 </body>
 </html>
